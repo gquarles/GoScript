@@ -39,10 +39,34 @@ function openFile()
     end
 end
 
+function writeF(command)
+    print(command)
+end
+
 function compile()
     openFile()
 
-    
+    for i = 1, #lines do
+        local words = {}
+        goscript = lines[i]
+        for word in goscript:gmatch("%w+") do table.insert(words, word) end
+        
+        if (words[1] == "move") then
+            if (words[2] == "forward") then
+                writeF("turtle.forward()")
+            elseif (words[2] == "back") then
+                writeF("turtle.back()")
+            elseif (words[2] == "left") then
+                writeF("left()")
+            elseif (words[2] == "right") then
+                writeF("right()")
+            else
+                print("error unknown move: " .. words[2] .. " line: " .. i)
+            end
+
+        end
+        
+    end
     
 end
 --Functions End--
