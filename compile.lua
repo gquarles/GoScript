@@ -2,6 +2,9 @@
 
 --Reads .go files and compiles to .lua
 
+--Usage compile <goscriptname.go>
+--Output <goscriptname.lua>
+
 --GOScript Compiler--
 
 
@@ -37,14 +40,22 @@ function openFile()
     for line in file.readLine do
         lines[ #lines + 1 ] = line
     end
+    file.close()
 end
 
 function writeF(command)
+    luafile = fs.open(compiledFile .. ".lua", "w")
+    luafile.writeLine(command)
+    table.insert(compiledLines, command)
     print(command)
 end
 
 function compile()
     openFile()
+    compiledFile = filePath:sub(1,-2)
+    compiledFile = compiledFile:sub(1,-2)
+    compiledFile = compiledFile:sub(1,-2)
+    
 
     for i = 1, #lines do
         local words = {}
