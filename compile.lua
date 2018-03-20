@@ -14,6 +14,10 @@ args = {...}
 filePath = args[1]
 lines = {}
 compiledLines = {}
+
+xCord = 0
+yCord = 0
+zCord = 0
 --Global Vars End--
 
 --Functions--
@@ -54,12 +58,64 @@ function writeF(command)
 	osfile.close()
 end
 
+function addMoveAPI()
+    writeF("---------MOVEAPI---------")
+
+    writeF("--GlobalVars--")
+
+    writeF("xCord = 0")
+    writeF("yCord = 0")
+    writeF("zCord = 0")
+    
+    writeF("--GlobalVars END--")
+
+    writeF("function forward()")
+    writeF("    if turtle.forward() then")
+    writeF("        xCord = xCord + 1")
+    writeF("    else")
+    writeF("        sleep(2)")
+    writeF("        forward()")
+    writeF("    end")
+    writeF("end")
+
+    writeF("function back()")
+    writeF("    if turtle.back() then")
+    writeF("        xCord = xCord - 1")
+    writeF("    else")
+    writeF("        sleep(2)")
+    writeF("        back()")
+    writeF("    end")
+    writeF("end")
+
+    writeF("function up()")
+    writeF("    if turtle.up() then")
+    writeF("        yCord = yCord + 1")
+    writeF("    else")
+    writeF("        sleep(2)")
+    writeF("        up()")
+    writeF("    end")
+    writeF("end")
+
+    writeF("function down()")
+    writeF("    if turtle.down() then")
+    writeF("        yCord = yCord - 1")
+    writeF("    else")
+    writeF("        sleep(2)")
+    writeF("        down()")
+    writeF("    end")
+     writeF("end")
+
+    writeF("---------MOVEAPI END---------")
+end
+
 function compile()
     openFile()
     compiledFileName = filePath:sub(1,-2)
     compiledFileName = compiledFileName:sub(1,-2)
     compiledFileName = compiledFileName:sub(1,-2)
     compiledFileName = compiledFileName .. ".lua"
+
+    addMoveAPI()
 
     for i = 1, #lines do
         local words = {}
@@ -68,17 +124,21 @@ function compile()
         
         if (words[1] == "move") then
             if (words[2] == "forward") then
-                writeF("turtle.forward()")
+                writeF("forward()")
             elseif (words[2] == "back") then
-                writeF("turtle.back()")
+                writeF("back()")
             elseif (words[2] == "left") then
                 writeF("turtle.turnLeft()")
-                writeF("turtle.forward()")
+                writeF("forward()")
                 writeF("turtle.turnRight()")
             elseif (words[2] == "right") then
                 writeF("turtle.turnRight()")
-                writeF("turtle.forward()")
+                writeF("forward()")
                 writeF("turtle.turnLeft()")
+            elseif (words[2] == "up") then
+                writeF("up()")
+            elseif (words[2] == "down") then
+                writeF("down()")
             else
                 print("error unknown move: " .. words[2] .. " line: " .. i)
             end
@@ -105,17 +165,27 @@ function compile()
                 writeF("turtle.turnRight()")
                 writeF("turtle.dig()")
                 writeF("turtle.turnLeft()")
+            elseif (words[2] == "back") then
+                writeF("turtle.turnLeft()")
+                writeF("turtle.turnLeft()")
+                writeF("turtle.dig()")
+                writeF("turtle.turnLeft()")
+                writeF("turtle.turnLeft()")
             elseif (words[2] == "forward") then
                 writeF("turtle.dig()")
             else
                 writeF("turtle.dig()")
             end
+        elseif (words[1] == "wait") or (words[1] == "sleep") then
+            writeF("sleep(" .. words[2] .. ")")
 
         end
         
     end
     
 end
+
+
 --Functions End--
 
 
