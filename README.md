@@ -28,3 +28,52 @@ GoScript will always include a small API written by me called **MoveAPI** that w
 
 GoScript currently works off of a command system. Each line is a new command, and every command will have exactly **one** *base* command with multiple *sub* commands that follow on the same line. For example a base command called foo with one sub command called bar would look like `foo bar` just like a base command of `move` with a following sub command of a direction like `forward` and an optional following sub command of an amount of moves like `3` putting it all together would look like `move forward 3`
 
+## Base Commands
+
+Each command requires exactly __ONE__ base command which tells the compiler what the compiler will be doing such as moving around, digging, placing, or even things in the inventory. The following sub commands refine the whole command by specifying the details of the command such as how far to move or what slot to navigate to in the inventory. There are quite a few base commands and more will be added as more functionality is added to GoScript.
+
+### Move
+The `move` base command is the basis for all of the turtles movement _(excluding turning)_ the `move` command has _2_ possible sub commands. Just like all base commands there are no required sub commands. The default sub commands for move are `forward` and `1` and when put together look like `move forward one` even though you only have to enter `move`. 
+##### Subcommands
+1. The first sub command of `move` is always a direction. If the turtle can not move to where it is told it will wait 2 seconds and also attempt to mine the block infront of it. This will give time for blocking mobs to move out of the way and clear out potential blocks in the path. The following are the possible direction subcommands 
+	* `forward` Which is the default
+	* `right`
+	* `left`
+	* `back` or `behind` both of which move the turtle behind
+	* `up`
+	* `down`
+2. The second sub command of `move` is a integer to express how many blocks you would like to move the turtle, if not given the default will always be one. This means `move forward` and `move forward 1` are both exactly the same. Any non-negative integer will work here.
+
+### Turn
+The `turn` base command will turn the turtle and keep track of the current direction relative to the starting direction for you. This means all the work here is done by the compiler and you won't have to worry about losing track about where you are facing. The `turn` base command has only __one__ sub command being the direction of the turn. Without a specified direction the `turn` command will always turn `left`. You can later center the turtle back to the starting positon, this will also occur when returning to the starting location or using some form of the MoveAPI for going to a relative coord. The sub commands for direction of `turn` are
+ * `left` being the default
+ * `right`
+ * `behind` or `back` both turning the turtle twice to be facing backwards relative to before the command is given.
+
+### Dig
+The `dig` base command will make the turtle dig in a direction. The resulting block being mined by the turtle will go in the next open inventory slot 1-12 and if the inventory is full it will go onto the floor near the turtle. The `dig` base command only has __one__ sub command being direction and defaulting to `forward` or infront of the turtle. The sub commands for direction of `dig` are
+* `forward` or `front` being the default
+* `left`
+* `right`
+* `back` or `behind` both turning then digging the block behind the turtle then returning to the original facing direction.
+* `up`
+* `down`
+
+### Place / Use
+The `place` base command can also be typed as `use` will place the currently selected block/item in the inventory. Defaulting to infront of the turtle or `forward` the following are the direction sub commands for `place`/`use`
+* `forward` or `front` being the default
+* `left`
+* `right`
+* `back` or `behind` both turning then placing a block in the space behind the turtle then returning to the original facing direction.
+* `up`
+* `down`
+
+### Slot
+The `slot` base command will simply instruct the turtle to select a slot 1 through 12 in the inventory with the default being `1`.  Any integer between and including `1` and `12` can be used as the turtle has 12 inventory spaces.
+
+### Wait / Sleep
+The `wait` base command can also be typed as `sleep` and it will make the turtle stop and wait any number of seconds. The default is `1` and is one second. Any non negative integer can be used here. This base command has __no__ sub commands.
+
+### Orientate / Center
+The `orientate` base command can also be typed as `center` and it will turn the turtle to its original facing direction when the script started. This base command has __no__ sub commands.
+
