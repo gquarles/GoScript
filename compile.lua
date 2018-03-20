@@ -180,7 +180,6 @@ function addMoveAPI()
     writeF("    end")
     writeF("end")
 
-
     writeF("---------MOVEAPI END---------")
 end
 
@@ -267,6 +266,43 @@ function compile()
         elseif (words[1] == "orientate") or (words[1] == "center") then
             writeF("orientate()")
 
+        elseif (words[1] == "place") or (words[1] == "use") then
+            if (words[2] == "up") then
+                writeF("turtle.placeUp()")
+            elseif (words[2] == "down") then
+                writeF("turtle.placeDown()")
+            elseif (words[2] == "left") then
+                writeF("turnLeft()")
+                writeF("turtle.place()")
+                writeF("turnRight()")
+            elseif (words[2] == "right") then
+                writeF("turnRight()")
+                writeF("turtle.place()")
+                writeF("turnLeft()")
+            elseif (words[2] == "back") or (words[2] == "behind") then
+                writeF("turnLeft()")
+                writeF("turnLeft()")
+                writeF("turtle.place()")
+                writeF("turnRight()")
+                writeF("turnRight()")
+            elseif(words[2] == "front") or (words[2] == "forward") then
+                writeF("turtle.place()")
+            else
+                writeF("turtle.place()")
+            end
+        elseif (words[1] == "select") or (words[1] == "slot") then
+            slot = 0
+            if (#words == 2) then
+                slot = words[2]
+            else
+                slot = 1
+            end
+            slotN = tonumber(slot)
+            if (slotN > 12) or (slotN < 1) then
+                print("Error Slot has to be 1-12 Line: " .. i)
+            else
+                writeF("turtle.select(" .. slot .. ")")
+            end
         end
         
     end
