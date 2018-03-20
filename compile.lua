@@ -14,10 +14,6 @@ args = {...}
 filePath = args[1]
 lines = {}
 compiledLines = {}
-
-xCord = 0
-yCord = 0
-zCord = 0
 --Global Vars End--
 
 --Functions--
@@ -66,6 +62,7 @@ function addMoveAPI()
     writeF("xCord = 0")
     writeF("yCord = 0")
     writeF("zCord = 0")
+    writeF("facing = 0")
     
     writeF("--GlobalVars END--")
 
@@ -103,7 +100,31 @@ function addMoveAPI()
     writeF("        sleep(2)")
     writeF("        down()")
     writeF("    end")
-     writeF("end")
+    writeF("end")
+
+    writeF("function turnLeft()")
+    writeF("    turtle.turnLeft()")
+    writeF("    if (facing == 3) then")
+    writeF("        facing = 0")
+    writeF("    else")
+    writeF("        facing = facing + 1")
+    writeF("    end")
+    writeF("end")
+
+    writeF("function turnRight()")
+    writeF("    turtle.turnRight()")
+    writeF("    if (facing == 0) then")
+    writeF("        facing = 3")
+    writeF("    else")
+    writeF("        facing = facing - 1")
+    writeF("    end")
+    writeF("end")
+
+    writeF("function orientate()")
+    writeF("    while facing > 0 do")
+    writeF("        turnLeft()")
+    writeF("    end")
+    writeF("end")
 
     writeF("---------MOVEAPI END---------")
 end
@@ -145,9 +166,12 @@ function compile()
 
         elseif (words[1] == "turn") then
             if (words[2] == "left") then
-                writeF("turtle.turnLeft()")
+                writeF("turnLeft()")
             elseif (words[2] == "right") then
-                writeF("turtle.turnRight()")
+                writeF("turnRight()")
+            elseif (words[2] == "back") or (words[2] == "behind") then
+                writeF("turnRight()")
+                writeF("turnRight()")
             else
                 print("error unkown turn: " .. words[2] .. " line: " .. i)
             end
@@ -178,6 +202,9 @@ function compile()
             end
         elseif (words[1] == "wait") or (words[1] == "sleep") then
             writeF("sleep(" .. words[2] .. ")")
+
+        elseif (words[1] == "orientate") or (words[1] == "center") then
+            writeF("orientate()")
 
         end
         
