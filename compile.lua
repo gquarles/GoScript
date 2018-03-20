@@ -66,20 +66,22 @@ function addMoveAPI()
     
     writeF("--GlobalVars END--")
 
-    writeF("function forward()")
-    writeF("    if turtle.forward() then")
-    writeF("        if (facing == 0) then")
-    writeF("            xCord = xCord + 1")
-    writeF("        elseif (facing == 1) then")
-    writeF("            yCord = yCord - 1")
-    writeF("        elseif (facing == 2) then")
-    writeF("            xCord = xCord - 1")
-    writeF("        elseif (facing == 3) then")
+    writeF("function forward(moveAmount)")
+    writeF("    for u=1, moveAmount do")
+    writeF("       if turtle.forward() then")
+    writeF("          if (facing == 0) then")
+    writeF("              xCord = xCord + 1")
+    writeF("          elseif (facing == 1) then")
+    writeF("              yCord = yCord - 1")
+    writeF("          elseif (facing == 2) then")
+    writeF("              xCord = xCord - 1")
+    writeF("          elseif (facing == 3) then")
     writeF("            yCord = yCord + 1")
+    writeF("           end")
+    writeF("       else")
+    writeF("           sleep(2)")
+    writeF("            forward()")
     writeF("        end")
-    writeF("    else")
-    writeF("        sleep(2)")
-    writeF("        forward()")
     writeF("    end")
     writeF("end")
 
@@ -142,6 +144,37 @@ function addMoveAPI()
     writeF("    end")
     writeF("end")
 
+    writeF("function goto(xGoto, yGoto)")
+    writeF("    orientate()")
+    writeF("    xCordSave = xCord")
+    writeF("    yCordSave = yCord")
+    writeF("    if (xGoto > xCordSave) then")
+    writeF("        for i=1, xGoto - xCordSave do")
+    writeF("            forward()")
+    writeF("        end")
+    writeF("    end")
+    writeF("    if (xGoto < xCordSave) then")
+    writeF("        for i=1, xCordSave - xGoto do")
+    writeF("            back()")
+    writeF("        end")
+    writeF("    end")
+    writeF("    if (yGoto > yCordSave) then")
+    writeF("        turnLeft()")
+    writeF("        for i=1, yGoto - yCordSave do")
+    writeF("            forward()")
+    writeF("        end")
+    writeF("        turnRight()")
+    writeF("    end")
+    writeF("    if (yGoto < yCordSave) then")
+    writeF("        turnLeft()")
+    writeF("        for i=1, yCordSave - yGoto do")
+    writeF("            back()")
+    writeF("        end")
+    writeF("        turnRight()")
+    writeF("    end")
+    writeF("end")
+
+
     writeF("---------MOVEAPI END---------")
 end
 
@@ -155,23 +188,29 @@ function compile()
     addMoveAPI()
 
     for i = 1, #lines do
-        local words = {}
+        words = {}
         goscript = lines[i]
         for word in goscript:gmatch("%w+") do table.insert(words, word) end
         
         if (words[1] == "move") then
+            moveAmount = 0
+            if (#words == 3) then
+                moveAmount = words[3]
+            else
+                moveAmount = 1
+            end
             if (words[2] == "forward") then
-                writeF("forward()")
+                writeF("forward(" .. moveAmount ..  ")")
             elseif (words[2] == "back") then
                 writeF("back()")
             elseif (words[2] == "left") then
-                writeF("turtle.turnLeft()")
-                writeF("forward()")
-                writeF("turtle.turnRight()")
+                writeF("turnLeft()")
+                writeF("forward(" .. moveAmount ..  ")")
+                writeF("turnRight()")
             elseif (words[2] == "right") then
-                writeF("turtle.turnRight()")
-                writeF("forward()")
-                writeF("turtle.turnLeft()")
+                writeF("turnRight()")
+                writeF("forward(" .. moveAmount ..  ")")
+                writeF("turnLeft()")
             elseif (words[2] == "up") then
                 writeF("up()")
             elseif (words[2] == "down") then
@@ -198,19 +237,19 @@ function compile()
             elseif (words[2] == "down") then
                 writeF("turtle.digDown()")
             elseif (words[2] == "left") then
-                writeF("turtle.turnLeft()")
+                writeF("turnLeft()")
                 writeF("turtle.dig()")
-                writeF("turtle.turnRight()")
+                writeF("turnRight()")
             elseif (words[2] == "right") then
-                writeF("turtle.turnRight()")
+                writeF("turnRight()")
                 writeF("turtle.dig()")
-                writeF("turtle.turnLeft()")
+                writeF("turnLeft()")
             elseif (words[2] == "back") then
-                writeF("turtle.turnLeft()")
-                writeF("turtle.turnLeft()")
+                writeF("turnLeft()")
+                writeF("turnLeft()")
                 writeF("turtle.dig()")
-                writeF("turtle.turnLeft()")
-                writeF("turtle.turnLeft()")
+                writeF("turnLeft()")
+                writeF("turnLeft()")
             elseif (words[2] == "forward") then
                 writeF("turtle.dig()")
             else
