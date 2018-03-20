@@ -1,5 +1,12 @@
 # goscript
+Git Repo for GoScript
 
-### GoScript is a scripting language made to work with Go Operating sytem but also be used as a standalone language to compile to **Native** Lua code
+## TODO 
+  >Add more to todo list
 
-TODO [ToDoList]
+## Changelog
+
+  >3/20/2018
+  ```
+  -Added Readme
+  ```
