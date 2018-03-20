@@ -80,7 +80,8 @@ function addMoveAPI()
     writeF("           end")
     writeF("       else")
     writeF("           sleep(2)")
-    writeF("            forward()")
+    writeF("            turtle.dig()")
+    writeF("           turtle.forward()")
     writeF("        end")
     writeF("    end")
     writeF("end")
@@ -99,7 +100,12 @@ function addMoveAPI()
     writeF("          end")
     writeF("      else")
     writeF("           sleep(2)")
-    writeF("           back()")
+    writeF("           turnLeft()")
+    writeF("           turnLeft()")
+    writeF("           turtle.dig()")
+    writeF("           turnLeft()")
+    writeF("           turnLeft()")
+    writeF("           turtle.back()")
     writeF("        end")
     writeF("    end")
     writeF("end")
@@ -110,6 +116,7 @@ function addMoveAPI()
     writeF("            zCord = zCord + 1")
     writeF("        else")
     writeF("            sleep(2)")
+    writeF("            turtle.digDown()")
     writeF("            up()")
     writeF("        end")
     writeF("    end")
@@ -121,6 +128,7 @@ function addMoveAPI()
     writeF("           zCord = zCord - 1")
     writeF("       else")
     writeF("           sleep(2)")
+    writeF("           turtle.digDown()")
     writeF("           down()")
     writeF("        end")
     writeF("    end")
@@ -290,6 +298,15 @@ function compile()
             else
                 writeF("turtle.place()")
             end
+        elseif (words[1] == "say") or (words[1] == "print") or (words[1] == "log") then
+            tempString = ""
+            for i = 1, #words do
+                if (i == 1) then
+                else
+                    tempString = tempString .. words[i] .. " "
+            end
+            writeF("print('" .. tempString .. "')")
+        end
         elseif (words[1] == "select") or (words[1] == "slot") then
             slot = 0
             if (#words == 2) then
