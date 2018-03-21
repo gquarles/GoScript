@@ -14,7 +14,7 @@ while requesting do
     requesting = false
     print("Cloned compiler from GitHub Repo at compiler.lua")
 
-    osfile = fs.open("compiler.lua", "w")
+    osfile = fs.open("compile.lua", "w")
     osfile.writeLine(respondedText)
 	osfile.close()
 
