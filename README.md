@@ -1,5 +1,13 @@
 # GoScript
 
+
+
+
+
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://raw.githubusercontent.com/gquarles/goscript/master/LICENSE) ![Codebase](https://img.shields.io/badge/code-Lua-blue.svg)
+
+
+
 GoScript is a easy to use scripting language that compiles to **native** lua code. GoScript can be used in junction with the turtle operating system Go (in development). GoScript is still in active development and will have frequent updates. As of right now the standalone compiler will not come with an auto update function. Visit this page for news and updates.
 
 
