@@ -218,12 +218,16 @@ function compile()
         
         if (words[1] == "move") then
             moveAmount = 0
+
             if (#words == 3) then
                 moveAmount = words[3]
             else
                 moveAmount = 1
             end
-            if (words[2] == "forward") then
+
+            if (#words == 1) then
+                writeF("forward(" .. moveAmount ..  ")")
+            elseif (words[2] == "forward") then
                 writeF("forward(" .. moveAmount ..  ")")
             elseif (words[2] == "back") then
                 writeF("back(" .. moveAmount .. ")")
@@ -244,70 +248,85 @@ function compile()
             end
 
         elseif (words[1] == "turn") then
-            if (words[2] == "left") then
+            if (#words == 1) then
                 writeF("turnLeft()")
-            elseif (words[2] == "right") then
-                writeF("turnRight()")
-            elseif (words[2] == "back") or (words[2] == "behind") then
-                writeF("turnRight()")
-                writeF("turnRight()")
             else
-                print("error unkown turn: " .. words[2] .. " line: " .. i)
+                if (words[2] == "left") then
+                    writeF("turnLeft()")
+                elseif (words[2] == "right") then
+                    writeF("turnRight()")
+                elseif (words[2] == "back") or (words[2] == "behind") then
+                    writeF("turnRight()")
+                    writeF("turnRight()")
+                else
+                    print("error unkown turn: " .. words[2] .. " line: " .. i)
+                end
             end
         
         elseif (words[1] == "dig") or (words[1] == "mine") then
-            if (words[2] == "up") then
-                writeF("turtle.digUp()")
-            elseif (words[2] == "down") then
-                writeF("turtle.digDown()")
-            elseif (words[2] == "left") then
-                writeF("turnLeft()")
-                writeF("turtle.dig()")
-                writeF("turnRight()")
-            elseif (words[2] == "right") then
-                writeF("turnRight()")
-                writeF("turtle.dig()")
-                writeF("turnLeft()")
-            elseif (words[2] == "back") then
-                writeF("turnLeft()")
-                writeF("turnLeft()")
-                writeF("turtle.dig()")
-                writeF("turnLeft()")
-                writeF("turnLeft()")
-            elseif (words[2] == "forward") then
+            if (#words == 1) then
                 writeF("turtle.dig()")
             else
-                writeF("turtle.dig()")
+                if (words[2] == "up") then
+                    writeF("turtle.digUp()")
+                elseif (words[2] == "down") then
+                    writeF("turtle.digDown()")
+                elseif (words[2] == "left") then
+                    writeF("turnLeft()")
+                    writeF("turtle.dig()")
+                    writeF("turnRight()")
+                elseif (words[2] == "right") then
+                    writeF("turnRight()")
+                    writeF("turtle.dig()")
+                    writeF("turnLeft()")
+                elseif (words[2] == "back") then
+                    writeF("turnLeft()")
+                    writeF("turnLeft()")
+                    writeF("turtle.dig()")
+                    writeF("turnLeft()")
+                    writeF("turnLeft()")
+                elseif (words[2] == "forward") then
+                    writeF("turtle.dig()")
+                else
+                    writeF("turtle.dig()")
+                end
             end
         elseif (words[1] == "wait") or (words[1] == "sleep") then
-            writeF("sleep(" .. words[2] .. ")")
-
+            if (#words == 1) then
+                writeF("sleep(1)")
+            else
+                writeF("sleep(" .. words[2] .. ")")
+            end
         elseif (words[1] == "orientate") or (words[1] == "center") then
             writeF("orientate()")
 
         elseif (words[1] == "place") or (words[1] == "use") then
-            if (words[2] == "up") then
-                writeF("turtle.placeUp()")
-            elseif (words[2] == "down") then
-                writeF("turtle.placeDown()")
-            elseif (words[2] == "left") then
-                writeF("turnLeft()")
-                writeF("turtle.place()")
-                writeF("turnRight()")
-            elseif (words[2] == "right") then
-                writeF("turnRight()")
-                writeF("turtle.place()")
-                writeF("turnLeft()")
-            elseif (words[2] == "back") or (words[2] == "behind") then
-                writeF("turnLeft()")
-                writeF("turnLeft()")
-                writeF("turtle.place()")
-                writeF("turnRight()")
-                writeF("turnRight()")
-            elseif(words[2] == "front") or (words[2] == "forward") then
+            if (#words == 1) then
                 writeF("turtle.place()")
             else
-                writeF("turtle.place()")
+                if (words[2] == "up") then
+                    writeF("turtle.placeUp()")
+                elseif (words[2] == "down") then
+                    writeF("turtle.placeDown()")
+                elseif (words[2] == "left") then
+                    writeF("turnLeft()")
+                    writeF("turtle.place()")
+                    writeF("turnRight()")
+                elseif (words[2] == "right") then
+                    writeF("turnRight()")
+                    writeF("turtle.place()")
+                    writeF("turnLeft()")
+                elseif (words[2] == "back") or (words[2] == "behind") then
+                    writeF("turnLeft()")
+                    writeF("turnLeft()")
+                    writeF("turtle.place()")
+                    writeF("turnRight()")
+                    writeF("turnRight()")
+                elseif(words[2] == "front") or (words[2] == "forward") then
+                    writeF("turtle.place()")
+                else
+                    writeF("turtle.place()")
+                end
             end
         elseif (words[1] == "say") or (words[1] == "print") or (words[1] == "log") then
             tempString = ""
