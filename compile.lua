@@ -211,12 +211,35 @@ function compile()
 
     addMoveAPI()
 
+    loops = 0
+
     for i = 1, #lines do
         words = {}
         goscript = lines[i]
         for word in goscript:gmatch("%w+") do table.insert(words, word) end
         
-        if (words[1] == "move") then
+        if (words[1] == "loop") then
+            loopAmount = 0
+            exit = 0
+
+            if (#words == 2) then
+                if (words[2] == "end") then
+                    loops = loops - 1
+                    writeF("end")
+                    exit = 1
+                else
+                    loopAmount = words[2]
+                end
+            end
+            if (exit == 0) then
+                if (loopAmount == 0) or (words[2] == "forever") then
+                    writeF("while true do")
+                else
+                    writeF("for i = 1, " .. loopAmount .. " do")
+                end
+                loops = loops + 1
+            end
+        elseif (words[1] == "move") then
             moveAmount = 0
 
             if (#words == 3) then
@@ -350,8 +373,15 @@ function compile()
             else
                 writeF("turtle.select(" .. slot .. ")")
             end
+
         end
-        
+    
+    end
+
+    if (loops > 0) then
+        for i = 1, loops do
+            writeF("end")
+        end
     end
     
 end
