@@ -1,3 +1,4 @@
+
 # GoScript
 
 
@@ -85,3 +86,8 @@ The `wait` base command can also be typed as `sleep` and it will make the turtle
 ### Orientate / Center
 The `orientate` base command can also be typed as `center` and it will turn the turtle to its original facing direction when the script started. This base command has __no__ sub commands.
 
+### Loop
+The `loop` base command is a bit more complicated than the other base commands. Loop in itself will not do anything, but it will affect code you write __after__ the loop command. There are two different ways of looping, an infinite loop and a numbered loop. The infinite loop will make all of the commands you write after the loop command repeat in order forever. While the numbered loop will make the commands you write after the loop a specified number of times. Loops __must__ have a end in the code, this is done by writing `loop end` and will no longer repeat any code after it. If you do not add this then GoScript will automaticlly generate one at the very end of your code. To loop a specified number of times do `loop number` where number is a whole number bigger than 0. (Putting 0 will make your loop infinite)
+The sub commands for loop are
+* `end` ending the loop
+* any whole number bigger than 0 will specify the number of loops
