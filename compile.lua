@@ -357,9 +357,9 @@ function compile()
                 if (i == 1) then
                 else
                     tempString = tempString .. words[i] .. " "
+                end
             end
             writeF("print('" .. tempString .. "')")
-        end
         elseif (words[1] == "select") or (words[1] == "slot") then
             slot = 0
             if (#words == 2) then
