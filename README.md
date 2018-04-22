@@ -42,7 +42,7 @@ GoScript currently works off of a command system. Each line is a new command, an
 Each command requires exactly __ONE__ base command which tells the compiler what the compiler will be doing such as moving around, digging, placing, or even things in the inventory. The following sub commands refine the whole command by specifying the details of the command such as how far to move or what slot to navigate to in the inventory. There are quite a few base commands and more will be added as more functionality is added to GoScript.
 
 ### Move
-The `move` base command is the basis for all of the turtles movement _(excluding turning)_ the `move` command has _2_ possible sub commands. Just like all base commands there are no required sub commands. The default sub commands for move are `forward` and `1` and when put together look like `move forward one` even though you only have to enter `move`. The sub commands for `move` are
+The `move` base command is the basis for all of the turtles movement _(excluding turning)_ the `move` command has _2_ possible sub commands. Just like all base commands there are no required sub commands. The default sub commands for move are `forward` and `1` and when put together look like `move forward 1` even though you only have to enter `move`. The sub commands for `move` are
 
 1. The first sub command of `move` is always a direction. If the turtle can not move to where it is told it will wait 2 seconds and also attempt to mine the block infront of it. This will give time for blocking mobs to move out of the way and clear out potential blocks in the path. The following are the possible direction subcommands 
 	* `forward` Which is the default
