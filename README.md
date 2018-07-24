@@ -27,11 +27,11 @@ Compiling a GoScript is very easy and can be done in two similar ways. Both ways
 
 __Example__ 
 1. Using method one to compile `foo.go` you would run `compiler` then input `foo.go` 
-2. Using method two to compiler `foo.go` you would run `compiler.lua foo.go`
+2. Using method two to compile `foo.go` you would run `compiler.lua foo.go`
 
 ## MoveAPI
 
-GoScript will always include a small API written by me called **MoveAPI** that will give your script some basic movement functions to make your life easier. You won't directly call these functions in your GoScript but they will be used if you use the base command move or goto/return. If you want to add extra lua code to your already compiled GoScript lua files the Coord system will keep track of your added movement and the goto functions in the script will still work. Look in the top of the compiled lua file for a brief description of the functions. Later they will be added here or possibly their own repo.
+GoScript will always include a small API called **MoveAPI** that will give your script some basic movement functions to make your life easier. You won't directly call these functions in your GoScript but they will be used if you use the base command move or goto/return. If you want to add extra lua code to your already compiled GoScript lua files the Coord system will keep track of your added movement and the goto functions in the script will still work. Look in the top of the compiled lua file for a brief description of the functions. Later they will be added here or possibly their own repo.
 
 ## How GoScript Works
 
