@@ -1,13 +1,7 @@
-move forward
-turn left
-move forward
-dig down
-move down
-dig left
 move left
 turn right
-turn right
+move up 2
 dig
-move forward
-move up
-turn left
+place down
+slot 2
+print Done
