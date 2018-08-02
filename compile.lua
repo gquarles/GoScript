@@ -254,11 +254,11 @@ function compile()
                 z = words[4]
             end
             writeF("goto(" .. x .. ", " .. y .. ", " .. z .. ")")
-        elseif (words[1] == ";") then
+        elseif (words[1] == "lua") then
             tempString = ""
             for i = 1, #words do
                 if (i == 1) then
-                    
+
                 else
                     tempString = tempString .. words[i] .. " "
                 end
@@ -376,7 +376,7 @@ function compile()
                     writeF("turtle.place()")
                 end
             end
-        elseif (words[1] == "say") or (words[1] == "print") or (words[1] == "log") or (words[1] == "|") then
+        elseif (words[1] == "say") or (words[1] == "print") or (words[1] == "log") then
             tempString = ""
             for i = 1, #words do
                 if (i == 1) then
