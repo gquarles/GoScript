@@ -255,15 +255,7 @@ function compile()
             end
             writeF("goto(" .. x .. ", " .. y .. ", " .. z .. ")")
         elseif (words[1] == "lua") then
-            tempString = ""
-            for i = 1, #words do
-                if (i == 1) then
-
-                else
-                    tempString = tempString .. words[i] .. " "
-                end
-            end
-            writeF(tempString)
+            writeF(lines[i])
         elseif (words[1] == "move") or (words[1] == "m") then
             moveAmount = 0
 
