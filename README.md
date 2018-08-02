@@ -1,4 +1,5 @@
 
+
 # GoScript
 
 
@@ -91,3 +92,16 @@ The `loop` base command is a bit more complicated than the other base commands. 
 The sub commands for loop are
 * `end` ending the loop
 * any whole number bigger than 0 will specify the number of loops
+
+### Print
+The `print` base command will display a message in the terminal of your turtle whenever it is called. So if you say `print Done!` then whenever the script gets to the point where you passed that print, the terminal will then show `Done!`.
+
+### Goto
+The `goto` base command will tell the turtle to move to cords *relative* to the inital position and direction the script started in. This means if I tell the turtle to goto 0 on the x, y, and z axis `goto 0 0 0` then the turtle will return to its starting position. Passing just `goto` into the compiler is the same as `goto 0 0 0` If you wanted to go 5 units to the x direction and 3 units up you would pass
+`goto 5 0 3`
+
+### Lua
+The `lua` base command allows you to insert native lua code into your script before it is compiled. Whatever is typed after the lua command will run as is, with no checks. So doing `lua print("Hello World!")` would insert `print("Hello World!")` This can present errors if you pass incorrect lua code. Just passing `lua` by itself will not do anything. This feature is more advanced but can let you do things in your script that would be otherwise impossible, like conditionals and your own functions. 
+
+### Rapid Prototyping
+GoScript was created for two main reasons, the first being to help teach people new to programming the basics and the flow of how a basic program works. Secondly it was made for prototyping your ideas *much* quicker than you can do in traditional lua. GoScript has a lot of aliases for its base commands, you can type different things for the same result. This allows newer people to not have to worry as much as remembering strict function names but it is also used to create a program very quickly to test an idea. All of the base commands (with a few exceptions) can be typed in 1 letter, allowing you to write less and get something out quick. For example if I wanted to move forward, then turn left and select slot 1 I could simply have in my GoScript `m` `t` and `s` each on their own lines. This concept is still being developed and when it is ready will have more information.
