@@ -243,6 +243,17 @@ function compile()
                 end
                 loops = loops + 1
             end
+        elseif (words[1] == "goto") or (words[1] == "g") then
+            if (#words == 1) then
+                x = 0
+                y = 0
+                z = 0
+            else
+                x = words[2]
+                y = words[3]
+                z = words[4]
+            end
+            writeF("goto(" .. x .. ", " .. y .. ", " .. z .. ")")
         elseif (words[1] == "move") or (words[1] == "m") then
             moveAmount = 0
 
