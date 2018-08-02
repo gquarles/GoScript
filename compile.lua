@@ -255,7 +255,8 @@ function compile()
             end
             writeF("goto(" .. x .. ", " .. y .. ", " .. z .. ")")
         elseif (words[1] == "lua") then
-            writeF(lines[i])
+            lua = string.gsub(lines[i], "lua ", "")
+            writeF(lua)
         elseif (words[1] == "move") or (words[1] == "m") then
             moveAmount = 0
 
