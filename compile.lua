@@ -227,7 +227,7 @@ function compile()
             exit = 0
 
             if (#words == 2) then
-                if (words[2] == "end") then
+                if (words[2] == "end") or (words[2] == "e") then
                     loops = loops - 1
                     writeF("end")
                     exit = 1
@@ -355,7 +355,7 @@ function compile()
                     writeF("turtle.place()")
                 end
             end
-        elseif (words[1] == "say") or (words[1] == "print") or (words[1] == "log") then
+        elseif (words[1] == "say") or (words[1] == "print") or (words[1] == "log") or (words[1] == "|") then
             tempString = ""
             for i = 1, #words do
                 if (i == 1) then
