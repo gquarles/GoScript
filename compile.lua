@@ -222,7 +222,7 @@ function compile()
         goscript = lines[i]
         for word in goscript:gmatch("%w+") do table.insert(words, word) end
         
-        if (words[1] == "loop") then
+        if (words[1] == "loop") or (words[1] == "l") then
             loopAmount = 0
             exit = 0
 
@@ -243,7 +243,7 @@ function compile()
                 end
                 loops = loops + 1
             end
-        elseif (words[1] == "move") then
+        elseif (words[1] == "move") or (words[1] == "m") then
             moveAmount = 0
 
             if (#words == 3) then
@@ -274,7 +274,7 @@ function compile()
                 print("error unknown move: " .. words[2] .. " line: " .. i)
             end
 
-        elseif (words[1] == "turn") then
+        elseif (words[1] == "turn") or (words[1] == "t") then
             if (#words == 1) then
                 writeF("turnLeft()")
             else
@@ -290,7 +290,7 @@ function compile()
                 end
             end
         
-        elseif (words[1] == "dig") or (words[1] == "mine") then
+        elseif (words[1] == "dig") or (words[1] == "mine") or (words[1] == "d") then
             if (#words == 1) then
                 writeF("turtle.dig()")
             else
@@ -318,16 +318,16 @@ function compile()
                     writeF("turtle.dig()")
                 end
             end
-        elseif (words[1] == "wait") or (words[1] == "sleep") then
+        elseif (words[1] == "wait") or (words[1] == "sleep") or (words[1] == "w") then
             if (#words == 1) then
                 writeF("sleep(1)")
             else
                 writeF("sleep(" .. words[2] .. ")")
             end
-        elseif (words[1] == "orientate") or (words[1] == "center") then
+        elseif (words[1] == "orientate") or (words[1] == "center") or (words[1] == "o") or (words[1] == "c") then
             writeF("orientate()")
 
-        elseif (words[1] == "place") or (words[1] == "use") then
+        elseif (words[1] == "place") or (words[1] == "use") or (words[1] == "p") then
             if (#words == 1) then
                 writeF("turtle.place()")
             else
@@ -364,7 +364,7 @@ function compile()
                 end
             end
             writeF("print('" .. tempString .. "')")
-        elseif (words[1] == "select") or (words[1] == "slot") then
+        elseif (words[1] == "select") or (words[1] == "slot") or (words[1] == "s") then
             slot = 0
             if (#words == 2) then
                 slot = words[2]
