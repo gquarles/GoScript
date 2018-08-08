@@ -17,17 +17,17 @@ compiledLines = {}
 --Global Vars End--
 
 --Functions--
-function clear()
+function clear() --Clears the terminal and sets the cursor to (1,1)
     term.clear()
     term.setCursorPos(1,1)
 end
 
-function getFilePath()
+function getFilePath() --Gets the .go file name from the user if not provided
     write("script: ")
     filePath = read()
 end
 
-function fileExists()
+function fileExists() --Returns if a file at filePath currently exists
     if (fs.exists(filePath)) then
         return true
     else
@@ -35,26 +35,26 @@ function fileExists()
     end
 end
 
-function openFile()
+function openFile() --Opens the .go file and reads it all into a table called lines
     file = fs.open(filePath, "r")
     for line in file.readLine do
-        lines[ #lines + 1 ] = line
+        lines[ #lines + 1 ] = line -- Loop through each line in the .go file and insert line by line into lines
     end
     file.close()
 end
 
-function writeF(command)
-    table.insert(compiledLines, command)
+function writeF(command) --Writes the lua code to the .lua file 
+    table.insert(compiledLines, command) --Adds the lua code to a table called compiledLines
     print(command)
 
-    osfile = fs.open(compiledFileName, "w")
-    for j = 1, #compiledLines do
+    osfile = fs.open(compiledFileName, "w") --Open the .lua file
+    for j = 1, #compiledLines do --Loop through compiledLines and add each line of lua to the .lua file
         osfile.writeLine(compiledLines[j])
     end
-	osfile.close()
+	osfile.close() --We open and close the .lua file with each line of goscript to make sure we dont lose it all if we hit an error
 end
 
-function addMoveAPI()
+function addMoveAPI() --Injects the moveapi into the start of the .lua file for goscript to take advantage of
     writeF("---------MOVEAPI---------")
 
     writeF("--GlobalVars--")
@@ -84,6 +84,54 @@ function addMoveAPI()
     writeF("           turtle.forward()")
     writeF("        end")
     writeF("    end")
+    writeF("end")
+
+    writeF("function harvest()")
+    writeF("local success, data = turtle.inspectDown()")
+    writeF("local harvestLevel = 0")
+    writeF("local isPlant = false")
+    writeF("local seeds = ''")
+    writeF("if success == true then")
+    writeF("if data.name == 'minecraft:wheat' then")
+    writeF("isPlant = true")
+    writeF("seeds = 'minecraft:wheat_seeds'")
+    writeF("harvestLevel = 7")
+    writeF("elseif data.name == 'minecraft:carrots' then")
+    writeF("isPlant = true")
+    writeF("seeds = 'minecraft:carrot'")
+    writeF("harvestLevel = 7")
+    writeF("elseif data.name == 'minecraft:potatoes' then")
+    writeF("isPlant = true")
+    writeF("seeds = 'minecraft:potato'")
+    writeF("harvestLevel = 7")
+    writeF("else")
+    writeF("end")
+    writeF("if isPlant == true then")
+    writeF("if data.metadata == harvestLevel then")
+    writeF("turtle.digDown()")
+    writeF("saveSlot = turtle.getSelectedSlot()")
+    writeF("found = findItem(seeds)")
+    writeF("if found == true then")
+    writeF("turtle.placeDown()")
+    writeF("end")
+    writeF("turtle.select(saveSlot)")
+    writeF("end")
+    writeF("end")
+    writeF("end")
+    writeF("end")
+
+    writeF("function findItem(itemToFind)")
+    writeF("local found = false")
+    writeF("for i = 1, 16 do")
+    writeF("item = turtle.getItemDetail(i)")
+    writeF("if item then")
+    writeF("if item.name == itemToFind then")
+    writeF("turtle.select(i)")
+    writeF("found = true")
+    writeF("end")
+    writeF("end")
+    writeF("end")
+    writeF("return found")
     writeF("end")
 
     writeF("function back(moveAmount)")
@@ -207,89 +255,89 @@ function addMoveAPI()
 end
 
 function compile()
-    openFile()
+    openFile() --Open the .go script and read it into ram
     compiledFileName = filePath:sub(1,-2)
     compiledFileName = compiledFileName:sub(1,-2)
     compiledFileName = compiledFileName:sub(1,-2)
-    compiledFileName = compiledFileName .. ".lua"
+    compiledFileName = compiledFileName .. ".lua" --change the name from file.go to file.lua
 
-    addMoveAPI()
+    addMoveAPI() -- inject moveapi into start of .lua file
 
-    loops = 0
+    loops = 0 --This keeps track of how many loops the user has in the goscript file
 
     for i = 1, #lines do
-        words = {}
-        goscript = lines[i]
-        for word in goscript:gmatch("%w+") do table.insert(words, word) end
+        words = {} --This will be a table of each word in one line of a goscript file
+        goscript = lines[i] --Get the line we are currently compiling
+        for word in goscript:gmatch("%w+") do table.insert(words, word) end --Split the string into a table by spaces
         
-        if (words[1] == "loop") or (words[1] == "l") then
-            loopAmount = 0
+        if (words[1] == "loop") or (words[1] == "l") then --If the base command was loop
+            loopAmount = 0 --Establish vars for the loop to occur
             exit = 0
 
-            if (#words == 2) then
-                if (words[2] == "end") or (words[2] == "e") then
-                    loops = loops - 1
-                    writeF("end")
-                    exit = 1
+            if (#words == 2) then --If there was 2 words then the user wants a numbered loop or wants to end a loop
+                if (words[2] == "end") or (words[2] == "e") then --User wants to end a loop
+                    loops = loops - 1 --We ended a loop so no need to keep track of it
+                    writeF("end") --End the loop in lua
+                    exit = 1 --We are done with this loop, Exit
                 else
-                    loopAmount = words[2]
+                    loopAmount = words[2] --Will loop how many times user says in 2nd word
                 end
             end
-            if (exit == 0) then
-                if (loopAmount == 0) or (words[2] == "forever") then
-                    writeF("while true do")
+            if (exit == 0) then --If we are not done
+                if (loopAmount == 0) or (words[2] == "forever") then --If the user wants a infinite loop
+                    writeF("while true do")--Make the infinite loop head
                 else
-                    writeF("for i = 1, " .. loopAmount .. " do")
+                    writeF("for i = 1, " .. loopAmount .. " do")--Make the loop head
                 end
-                loops = loops + 1
+                loops = loops + 1--Keep track of a loop without an end statement
             end
-        elseif (words[1] == "goto") or (words[1] == "g") then
-            if (#words == 1) then
+        elseif (words[1] == "goto") or (words[1] == "g") then --Goto base command
+            if (#words == 1) then --If just the base command was provided 0 out the cords
                 x = 0
                 y = 0
                 z = 0
-            else
+            else --Set the cords to the 2nd, 3rd, and 4th words in the command
                 x = words[2]
                 y = words[3]
                 z = words[4]
             end
-            writeF("goto(" .. x .. ", " .. y .. ", " .. z .. ")")
-        elseif (words[1] == "lua") then
-            lua = string.gsub(lines[i], "lua ", "")
-            writeF(lua)
-        elseif (words[1] == "move") or (words[1] == "m") then
-            moveAmount = 0
+            writeF("goto(" .. x .. ", " .. y .. ", " .. z .. ")")--Write the goto function which is in moveapi already injected into the top of the lua
+        elseif (words[1] == "lua") then --If base command is lua
+            lua = string.gsub(lines[i], "lua ", "") --Remove the base command from the words and put it in one string
+            writeF(lua)--Write the lua the user provided, this can cause user made errors
+        elseif (words[1] == "move") or (words[1] == "m") then --Move base command
+            moveAmount = 0 --Var establishment
 
-            if (#words == 3) then
+            if (#words == 3) then --If a direction and amount was provided
                 moveAmount = words[3]
-            else
+            else --If no amount was provided default to one move
                 moveAmount = 1
             end
 
-            if (#words == 1) then
-                writeF("forward(" .. moveAmount ..  ")")
+            if (#words == 1) then --If no direction was given default to forward
+                writeF("forward(" .. moveAmount ..  ")") --Write lua to call the moveapi forward with how many movements function
             elseif (words[2] == "forward") then
                 writeF("forward(" .. moveAmount ..  ")")
-            elseif (words[2] == "back") then
+            elseif (words[2] == "back") then 
                 writeF("back(" .. moveAmount .. ")")
             elseif (words[2] == "left") then
-                writeF("turnLeft()")
+                writeF("turnLeft()") --Turn left to move left
                 writeF("forward(" .. moveAmount ..  ")")
-                writeF("turnRight()")
+                writeF("turnRight()") --Turn right to be facing the same way as we started
             elseif (words[2] == "right") then
-                writeF("turnRight()")
+                writeF("turnRight()") --Turn right to move right
                 writeF("forward(" .. moveAmount ..  ")")
-                writeF("turnLeft()")
+                writeF("turnLeft()") --Turn left to be facing the sam way we started
             elseif (words[2] == "up") then
                 writeF("up(".. moveAmount .. ")")
             elseif (words[2] == "down") then
                 writeF("down(" .. moveAmount .. ")")
             else
-                print("error unknown move: " .. words[2] .. " line: " .. i)
+                print("error unknown move: " .. words[2] .. " line: " .. i) --Print an error if a direction was given but it wasnt forward, back, up, down, left, or right
             end
 
-        elseif (words[1] == "turn") or (words[1] == "t") then
-            if (#words == 1) then
+        elseif (words[1] == "turn") or (words[1] == "t") then --Turn base command
+            if (#words == 1) then --If no direction was given default to left
                 writeF("turnLeft()")
             else
                 if (words[2] == "left") then
@@ -297,15 +345,15 @@ function compile()
                 elseif (words[2] == "right") then
                     writeF("turnRight()")
                 elseif (words[2] == "back") or (words[2] == "behind") then
-                    writeF("turnRight()")
+                    writeF("turnRight()") --Turn right twice to be facing backwards
                     writeF("turnRight()")
                 else
-                    print("error unkown turn: " .. words[2] .. " line: " .. i)
+                    print("error unkown turn: " .. words[2] .. " line: " .. i) --Print an error if a direction was given that wasnt left, right, or back
                 end
             end
         
-        elseif (words[1] == "dig") or (words[1] == "mine") or (words[1] == "d") then
-            if (#words == 1) then
+        elseif (words[1] == "dig") or (words[1] == "mine") or (words[1] == "d") then --Dig base command
+            if (#words == 1) then --If no sub commands just dig infront of turtle
                 writeF("turtle.dig()")
             else
                 if (words[2] == "up") then
@@ -313,36 +361,36 @@ function compile()
                 elseif (words[2] == "down") then
                     writeF("turtle.digDown()")
                 elseif (words[2] == "left") then
-                    writeF("turnLeft()")
+                    writeF("turnLeft()") --Turn left to dig left
                     writeF("turtle.dig()")
-                    writeF("turnRight()")
+                    writeF("turnRight()")--Turn right to be facing the same way we started
                 elseif (words[2] == "right") then
-                    writeF("turnRight()")
+                    writeF("turnRight()")--Turn right to dig right
                     writeF("turtle.dig()")
-                    writeF("turnLeft()")
+                    writeF("turnLeft()")--Turn left to be facing the same way we started
                 elseif (words[2] == "back") then
-                    writeF("turnLeft()")
+                    writeF("turnLeft()")--Turn left 2 times to be facing backwards
                     writeF("turnLeft()")
                     writeF("turtle.dig()")
                     writeF("turnLeft()")
-                    writeF("turnLeft()")
-                elseif (words[2] == "forward") then
+                    writeF("turnLeft()")--Turn left 2 times to be back facing where we started
+                elseif (words[2] == "forward") then --If forward was given
                     writeF("turtle.dig()")
                 else
-                    writeF("turtle.dig()")
+                    writeF("turtle.dig()") --Default to dig even if more sub commands given
                 end
             end
-        elseif (words[1] == "wait") or (words[1] == "sleep") or (words[1] == "w") then
-            if (#words == 1) then
+        elseif (words[1] == "wait") or (words[1] == "sleep") or (words[1] == "w") then --Wait base command
+            if (#words == 1) then --If nothing was given but the base command, default to sleep 1 second
                 writeF("sleep(1)")
             else
-                writeF("sleep(" .. words[2] .. ")")
+                writeF("sleep(" .. words[2] .. ")") --Sleep for user selected seconds
             end
-        elseif (words[1] == "orientate") or (words[1] == "center") or (words[1] == "o") or (words[1] == "c") then
-            writeF("orientate()")
+        elseif (words[1] == "orientate") or (words[1] == "center") or (words[1] == "o") or (words[1] == "c") then --center base command
+            writeF("orientate()")--Turn the turtle to face the same way when it started the script
 
-        elseif (words[1] == "place") or (words[1] == "use") or (words[1] == "p") then
-            if (#words == 1) then
+        elseif (words[1] == "place") or (words[1] == "use") or (words[1] == "p") then--Place base command
+            if (#words == 1) then --If no direction was given default to place infront of turtle
                 writeF("turtle.place()")
             else
                 if (words[2] == "up") then
@@ -350,58 +398,57 @@ function compile()
                 elseif (words[2] == "down") then
                     writeF("turtle.placeDown()")
                 elseif (words[2] == "left") then
-                    writeF("turnLeft()")
+                    writeF("turnLeft()")--Turn left to place left
                     writeF("turtle.place()")
-                    writeF("turnRight()")
+                    writeF("turnRight()")--Turn right to be back the way we started
                 elseif (words[2] == "right") then
-                    writeF("turnRight()")
+                    writeF("turnRight()")--Turn right to place right
                     writeF("turtle.place()")
-                    writeF("turnLeft()")
+                    writeF("turnLeft()")--Turn left to be back the way we started
                 elseif (words[2] == "back") or (words[2] == "behind") then
-                    writeF("turnLeft()")
+                    writeF("turnLeft()")--Turn left 2 times to be facing backwards
                     writeF("turnLeft()")
                     writeF("turtle.place()")
                     writeF("turnRight()")
-                    writeF("turnRight()")
+                    writeF("turnRight()")--Turn right 2 times to be facing the way we started
                 elseif(words[2] == "front") or (words[2] == "forward") then
                     writeF("turtle.place()")
                 else
-                    writeF("turtle.place()")
+                    writeF("turtle.place()")--All other subcommands result in forward placement
                 end
             end
-        elseif (words[1] == "say") or (words[1] == "print") or (words[1] == "log") then
-            tempString = ""
-            for i = 1, #words do
+        elseif (words[1] == "say") or (words[1] == "print") or (words[1] == "log") then --print base command
+            tempString = "" --Make a string to hold the words
+            for i = 1, #words do--Loop through each word
                 if (i == 1) then
                 else
-                    tempString = tempString .. words[i] .. " "
+                    tempString = tempString .. words[i] .. " " --Add each word to the tempstring except the first word which would be the command
                 end
             end
-            writeF("print('" .. tempString .. "')")
-        elseif (words[1] == "select") or (words[1] == "slot") or (words[1] == "s") then
-            slot = 0
-            if (#words == 2) then
+            writeF("print('" .. tempString .. "')")--print the string of words
+        elseif (words[1] == "select") or (words[1] == "slot") or (words[1] == "s") then --Select base command
+            slot = 0--establish vars
+            if (#words == 2) then --If user gives a slot number 
                 slot = words[2]
-            else
+            else --Otherwise default to slot 1
                 slot = 1
             end
-            slotN = tonumber(slot)
-            if (slotN > 12) or (slotN < 1) then
+            slotN = tonumber(slot) --Change the string of the number to a number
+            if (slotN > 12) or (slotN < 1) then--Error if the number is less than 1 or greater than 12
                 print("Error Slot has to be 1-12 Line: " .. i)
             else
-                writeF("turtle.select(" .. slot .. ")")
+                writeF("turtle.select(" .. slot .. ")")--Select the slot
             end
 
         end
     
     end
 
-    if (loops > 0) then
-        for i = 1, loops do
-            writeF("end")
+    if (loops > 0) then --If we reach the end and we still have loops that do not have an end statement
+        for i = 1, loops do 
+            writeF("end") --Put an end statement at the end of the lua as many times as we have open loops
         end
     end
-    
 end
 
 
@@ -411,11 +458,11 @@ end
 
 --Main--
 
-if (filePath == nil) then
-    getFilePath()
+if (filePath == nil) then --If no file path was given as an arg
+    getFilePath() --Ask the user for a file
 end
-if (fileExists()) then
-    compile()
-else
+if (fileExists()) then --If the file is where the user says
+    compile() --Compile the goscript
+else--Othereise error
     print("Error - File does not exist at " .. filePath)
 end
