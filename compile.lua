@@ -381,23 +381,22 @@ function compile()
             writeF(lua)--Write the lua the user provided, this can cause user made errors
         elseif (words[1] == "harvest") or (words[1] == "h") then --Harvest base command
             writeF("harvest()")
-        elseif (words[1] == "bank") or (words[1] == "drop") or (words[1] == "b") then
-
-            if (#words == 1) then
+        elseif (words[1] == "bank") or (words[1] == "drop") or (words[1] == "b") then --The bank base command
+            if (#words == 1) then --If the user gives no sub commands, default to 0 and front
                 writeF("bank(0, 'front')")
             else
-                local slot = words[2]
-                if (#words == 2) then
+                local slot = words[2] --If the user gave atleast one sub command asign the 2nd word of the command to the slot
+                if (#words == 2) then --If the user only gave 1 sub command then default the direction to front
                     writeF("bank(" .. slot .. ", 'front')")
                 else
-                    local direction = words[3]
+                    local direction = words[3] --If the user gives all 2 sub commands then assign the 3rd word of the command to direction
                     if (direction == "forward") or (direction == "front") or (direction == "f") then
                         writeF("bank(" .. slot .. ", 'front')")
                     elseif (direction == "back") or (direction == "behind") or (direction == "b") then
                         writeF("bank(" .. slot .. ", 'back')")
                     elseif (direction == "up") or (direction == "u") then
                         writeF("bank(" .. slot .. ", 'up')")
-                    elseif (direction == "left") or (direction == "l") then
+                    elseif (direction == "left") or (direction == "l") then --All of this is just inserting direction from the direction var and sending it to be written into the file
                         writeF("bank(" .. slot .. ", 'left')")
                     elseif (direction == "right") or (direction == "r") then
                         writeF("bank(" .. slot .. ", 'right')")
