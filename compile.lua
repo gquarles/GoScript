@@ -417,21 +417,21 @@ function compile()
 
             if (#words == 1) then --If no direction was given default to forward
                 writeF("forward(" .. moveAmount ..  ")") --Write lua to call the moveapi forward with how many movements function
-            elseif (words[2] == "forward") then
+            elseif (words[2] == "forward") or (words[2] == "f") then
                 writeF("forward(" .. moveAmount ..  ")")
-            elseif (words[2] == "back") then 
+            elseif (words[2] == "back") or (words[2] == "b") then 
                 writeF("back(" .. moveAmount .. ")")
-            elseif (words[2] == "left") then
+            elseif (words[2] == "left") or (words[2] == "l") then
                 writeF("turnLeft()") --Turn left to move left
                 writeF("forward(" .. moveAmount ..  ")")
                 writeF("turnRight()") --Turn right to be facing the same way as we started
-            elseif (words[2] == "right") then
+            elseif (words[2] == "right") or (words[2] == "r") then
                 writeF("turnRight()") --Turn right to move right
                 writeF("forward(" .. moveAmount ..  ")")
                 writeF("turnLeft()") --Turn left to be facing the sam way we started
-            elseif (words[2] == "up") then
+            elseif (words[2] == "up") or (words[2] == "u") then
                 writeF("up(".. moveAmount .. ")")
-            elseif (words[2] == "down") then
+            elseif (words[2] == "down") or (words[2] == "d") then
                 writeF("down(" .. moveAmount .. ")")
             else
                 print("error unknown move: " .. words[2] .. " line: " .. i) --Print an error if a direction was given but it wasnt forward, back, up, down, left, or right
