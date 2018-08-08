@@ -17,17 +17,17 @@ compiledLines = {}
 --Global Vars End--
 
 --Functions--
-function clear()
+function clear() --Clears the terminal and sets the cursor to (1,1)
     term.clear()
     term.setCursorPos(1,1)
 end
 
-function getFilePath()
+function getFilePath() --Gets the .go file name from the user if not provided
     write("script: ")
     filePath = read()
 end
 
-function fileExists()
+function fileExists() --Returns if a file at filePath currently exists
     if (fs.exists(filePath)) then
         return true
     else
@@ -35,26 +35,26 @@ function fileExists()
     end
 end
 
-function openFile()
+function openFile() --Opens the .go file and reads it all into a table called lines
     file = fs.open(filePath, "r")
     for line in file.readLine do
-        lines[ #lines + 1 ] = line
+        lines[ #lines + 1 ] = line -- Loop through each line in the .go file and insert line by line into lines
     end
     file.close()
 end
 
-function writeF(command)
-    table.insert(compiledLines, command)
+function writeF(command) --Writes the lua code to the .lua file 
+    table.insert(compiledLines, command) --Adds the lua code to a table called compiledLines
     print(command)
 
-    osfile = fs.open(compiledFileName, "w")
-    for j = 1, #compiledLines do
+    osfile = fs.open(compiledFileName, "w") --Open the .lua file
+    for j = 1, #compiledLines do --Loop through compiledLines and add each line of lua to the .lua file
         osfile.writeLine(compiledLines[j])
     end
-	osfile.close()
+	osfile.close() --We open and close the .lua file with each line of goscript to make sure we dont lose it all if we hit an error
 end
 
-function addMoveAPI()
+function addMoveAPI() --Injects the moveapi into the start of the .lua file for goscript to take advantage of
     writeF("---------MOVEAPI---------")
 
     writeF("--GlobalVars--")
@@ -207,15 +207,15 @@ function addMoveAPI()
 end
 
 function compile()
-    openFile()
+    openFile() --Open the .go script and read it into ram
     compiledFileName = filePath:sub(1,-2)
     compiledFileName = compiledFileName:sub(1,-2)
     compiledFileName = compiledFileName:sub(1,-2)
-    compiledFileName = compiledFileName .. ".lua"
+    compiledFileName = compiledFileName .. ".lua" --change the name from file.go to file.lua
 
-    addMoveAPI()
+    addMoveAPI() -- inject moveapi into start of .lua file
 
-    loops = 0
+    loops = 0 --This keeps track of how many loops the user has in the goscript file
 
     for i = 1, #lines do
         words = {}
