@@ -379,8 +379,34 @@ function compile()
         elseif (words[1] == "lua") then --If base command is lua
             lua = string.gsub(lines[i], "lua ", "") --Remove the base command from the words and put it in one string
             writeF(lua)--Write the lua the user provided, this can cause user made errors
-        elseif (words[1] == "harvest") or (words[1] == "h") then
+        elseif (words[1] == "harvest") or (words[1] == "h") then --Harvest base command
             writeF("harvest()")
+        elseif (words[1] == "bank") or (words[1] == "drop") or (words[1] == "b") then
+
+            if (#words == 1) then
+                writeF("bank(0, 'front')")
+            else
+                local slot = words[2]
+                if (#words == 2) then
+                    writeF("bank(" .. slot .. ", 'front')")
+                else
+                    local direction = words[3]
+                    if (direction == "forward") or (direction == "front") or (direction == "f") then
+                        writeF("bank(" .. slot .. ", 'front')")
+                    elseif (direction == "back") or (direction == "behind") or (direction == "b") then
+                        writeF("bank(" .. slot .. ", 'back')")
+                    elseif (direction == "up") or (direction == "u") then
+                        writeF("bank(" .. slot .. ", 'up')")
+                    elseif (direction == "left") or (direction == "l") then
+                        writeF("bank(" .. slot .. ", 'left')")
+                    elseif (direction == "right") or (direction == "r") then
+                        writeF("bank(" .. slot .. ", 'right')")
+                    elseif (direction == "down") or (direction == "d") then
+                        writeF("bank(" .. slot .. ", 'down')")
+                    end
+                end
+            end
+
         elseif (words[1] == "move") or (words[1] == "m") then --Move base command
             moveAmount = 0 --Var establishment
 
