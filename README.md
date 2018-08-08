@@ -104,6 +104,17 @@ The `goto` base command will tell the turtle to move to cords *relative* to the 
 ### Harvest
 The `harvest` base command will tell the turtle to check the block below it and if it is fully grown and either carrots, potatoes, or wheat the turtle will harvest and replant one seed.
 
+### Bank / Drop
+The `bank` base command will tell the turtle to drop items from it's inventory, if the turtle drops where a chest is located it will put the items inside the chest if there is room. The first sub command is which slot the turtle will drop, this will default to `0` and will drop the turtles entire inventory. The second sub command is direction, which can be
+* `front` or `forward` or `f`
+* `up` or `u`
+* `down` or `d`
+* `left` or `l`
+* `right` or `l`
+* `back` or `behind` or `b`
+
+A bank command which drops the entire inventory upwards would look like `bank 0 up` or using rapid would look like `b 0 u`
+
 ### Lua
 The `lua` base command allows you to insert native lua code into your script before it is compiled. Whatever is typed after the lua command will run as is, with no checks. So doing `lua print("Hello World!")` would insert `print("Hello World!")` This can present errors if you pass incorrect lua code. Just passing `lua` by itself will not do anything. This feature is more advanced but can let you do things in your script that would be otherwise impossible, like conditionals and your own functions. 
 
