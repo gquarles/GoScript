@@ -101,6 +101,9 @@ The `print` base command will display a message in the terminal of your turtle w
 The `goto` base command will tell the turtle to move to cords *relative* to the inital position and direction the script started in. This means if I tell the turtle to goto 0 on the x, y, and z axis `goto 0 0 0` then the turtle will return to its starting position. Passing just `goto` into the compiler is the same as `goto 0 0 0` If you wanted to go 5 units to the x direction and 3 units up you would pass
 `goto 5 0 3`
 
+### Harvest
+The `harvest` base command will tell the turtle to check the block below it and if it is fully grown and either carrots, potatoes, or wheat the turtle will harvest and replant one seed.
+
 ### Lua
 The `lua` base command allows you to insert native lua code into your script before it is compiled. Whatever is typed after the lua command will run as is, with no checks. So doing `lua print("Hello World!")` would insert `print("Hello World!")` This can present errors if you pass incorrect lua code. Just passing `lua` by itself will not do anything. This feature is more advanced but can let you do things in your script that would be otherwise impossible, like conditionals and your own functions. 
 
