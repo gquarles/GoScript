@@ -218,46 +218,46 @@ function compile()
     loops = 0 --This keeps track of how many loops the user has in the goscript file
 
     for i = 1, #lines do
-        words = {}
-        goscript = lines[i]
-        for word in goscript:gmatch("%w+") do table.insert(words, word) end
+        words = {} --This will be a table of each word in one line of a goscript file
+        goscript = lines[i] --Get the line we are currently compiling
+        for word in goscript:gmatch("%w+") do table.insert(words, word) end --Split the string into a table by spaces
         
-        if (words[1] == "loop") or (words[1] == "l") then
-            loopAmount = 0
+        if (words[1] == "loop") or (words[1] == "l") then --If the base command was loop
+            loopAmount = 0 --Establish vars for the loop to occur
             exit = 0
 
-            if (#words == 2) then
-                if (words[2] == "end") or (words[2] == "e") then
-                    loops = loops - 1
-                    writeF("end")
-                    exit = 1
+            if (#words == 2) then --If there was 2 words then the user wants a numbered loop or wants to end a loop
+                if (words[2] == "end") or (words[2] == "e") then --User wants to end a loop
+                    loops = loops - 1 --We ended a loop so no need to keep track of it
+                    writeF("end") --End the loop in lua
+                    exit = 1 --We are done with this loop, Exit
                 else
-                    loopAmount = words[2]
+                    loopAmount = words[2] --Will loop how many times user says in 2nd word
                 end
             end
-            if (exit == 0) then
-                if (loopAmount == 0) or (words[2] == "forever") then
-                    writeF("while true do")
+            if (exit == 0) then --If we are not done
+                if (loopAmount == 0) or (words[2] == "forever") then --If the user wants a infinite loop
+                    writeF("while true do")--Make the infinite loop head
                 else
-                    writeF("for i = 1, " .. loopAmount .. " do")
+                    writeF("for i = 1, " .. loopAmount .. " do")--Make the loop head
                 end
-                loops = loops + 1
+                loops = loops + 1--Keep track of a loop without an end statement
             end
-        elseif (words[1] == "goto") or (words[1] == "g") then
-            if (#words == 1) then
+        elseif (words[1] == "goto") or (words[1] == "g") then --Goto base command
+            if (#words == 1) then --If just the base command was provided 0 out the cords
                 x = 0
                 y = 0
                 z = 0
-            else
+            else --Set the cords to the 2nd, 3rd, and 4th words in the command
                 x = words[2]
                 y = words[3]
                 z = words[4]
             end
-            writeF("goto(" .. x .. ", " .. y .. ", " .. z .. ")")
-        elseif (words[1] == "lua") then
-            lua = string.gsub(lines[i], "lua ", "")
-            writeF(lua)
-        elseif (words[1] == "move") or (words[1] == "m") then
+            writeF("goto(" .. x .. ", " .. y .. ", " .. z .. ")")--Write the goto function which is in moveapi already injected into the top of the lua
+        elseif (words[1] == "lua") then --If base command is lua
+            lua = string.gsub(lines[i], "lua ", "") --Remove the base command from the words and put it in one string
+            writeF(lua)--Write the lua the user provided, this can cause user made errors
+        elseif (words[1] == "move") or (words[1] == "m") then --Move base command
             moveAmount = 0
 
             if (#words == 3) then
