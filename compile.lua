@@ -305,6 +305,8 @@ function compile()
         elseif (words[1] == "lua") then --If base command is lua
             lua = string.gsub(lines[i], "lua ", "") --Remove the base command from the words and put it in one string
             writeF(lua)--Write the lua the user provided, this can cause user made errors
+        elseif (words[1] == "harvest") or (words[1] == "h") then
+            writeF("harvest()")
         elseif (words[1] == "move") or (words[1] == "m") then --Move base command
             moveAmount = 0 --Var establishment
 
