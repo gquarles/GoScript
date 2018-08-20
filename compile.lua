@@ -441,11 +441,11 @@ function compile()
             if (#words == 1) then --If no direction was given default to left
                 writeF("turnLeft()")
             else
-                if (words[2] == "left") then
+                if (words[2] == "left") or (words[2] == "l") then
                     writeF("turnLeft()")
-                elseif (words[2] == "right") then
+                elseif (words[2] == "right") (words[2] == "r") then
                     writeF("turnRight()")
-                elseif (words[2] == "back") or (words[2] == "behind") then
+                elseif (words[2] == "back") or (words[2] == "behind") or (words[2] == "b") then
                     writeF("turnRight()") --Turn right twice to be facing backwards
                     writeF("turnRight()")
                 else
@@ -457,25 +457,25 @@ function compile()
             if (#words == 1) then --If no sub commands just dig infront of turtle
                 writeF("turtle.dig()")
             else
-                if (words[2] == "up") then
+                if (words[2] == "up") or (words[2] == "u") then
                     writeF("turtle.digUp()")
-                elseif (words[2] == "down") then
+                elseif (words[2] == "down") or (words[2] == "d") then
                     writeF("turtle.digDown()")
-                elseif (words[2] == "left") then
+                elseif (words[2] == "left") or (words[2] == "l") then
                     writeF("turnLeft()") --Turn left to dig left
                     writeF("turtle.dig()")
                     writeF("turnRight()")--Turn right to be facing the same way we started
-                elseif (words[2] == "right") then
+                elseif (words[2] == "right") (words[2] == "r") then
                     writeF("turnRight()")--Turn right to dig right
                     writeF("turtle.dig()")
                     writeF("turnLeft()")--Turn left to be facing the same way we started
-                elseif (words[2] == "back") then
+                elseif (words[2] == "back") (words[2] == "b") or (words[2] == "behind")  then
                     writeF("turnLeft()")--Turn left 2 times to be facing backwards
                     writeF("turnLeft()")
                     writeF("turtle.dig()")
                     writeF("turnLeft()")
                     writeF("turnLeft()")--Turn left 2 times to be back facing where we started
-                elseif (words[2] == "forward") then --If forward was given
+                elseif (words[2] == "forward") or (words[2] == "f") then --If forward was given
                     writeF("turtle.dig()")
                 else
                     writeF("turtle.dig()") --Default to dig even if more sub commands given
@@ -494,25 +494,25 @@ function compile()
             if (#words == 1) then --If no direction was given default to place infront of turtle
                 writeF("turtle.place()")
             else
-                if (words[2] == "up") then
+                if (words[2] == "up") or (words[2] == "u") then
                     writeF("turtle.placeUp()")
-                elseif (words[2] == "down") then
+                elseif (words[2] == "down") or (words[2] == "d") then
                     writeF("turtle.placeDown()")
-                elseif (words[2] == "left") then
+                elseif (words[2] == "left") or (words[2] == "l") then
                     writeF("turnLeft()")--Turn left to place left
                     writeF("turtle.place()")
                     writeF("turnRight()")--Turn right to be back the way we started
-                elseif (words[2] == "right") then
+                elseif (words[2] == "right") or (words[2] == "r") then
                     writeF("turnRight()")--Turn right to place right
                     writeF("turtle.place()")
                     writeF("turnLeft()")--Turn left to be back the way we started
-                elseif (words[2] == "back") or (words[2] == "behind") then
+                elseif (words[2] == "back") or (words[2] == "behind") or (words[2] == "b") then
                     writeF("turnLeft()")--Turn left 2 times to be facing backwards
                     writeF("turnLeft()")
                     writeF("turtle.place()")
                     writeF("turnRight()")
                     writeF("turnRight()")--Turn right 2 times to be facing the way we started
-                elseif(words[2] == "front") or (words[2] == "forward") then
+                elseif(words[2] == "front") or (words[2] == "forward") or (words[2] == "f") then
                     writeF("turtle.place()")
                 else
                     writeF("turtle.place()")--All other subcommands result in forward placement
