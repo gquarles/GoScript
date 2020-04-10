@@ -443,7 +443,7 @@ function compile()
             else
                 if (words[2] == "left") or (words[2] == "l") then
                     writeF("turnLeft()")
-                elseif (words[2] == "right") (words[2] == "r") then
+                elseif (words[2] == "right") or (words[2] == "r") then
                     writeF("turnRight()")
                 elseif (words[2] == "back") or (words[2] == "behind") or (words[2] == "b") then
                     writeF("turnRight()") --Turn right twice to be facing backwards
