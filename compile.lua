@@ -46,8 +46,9 @@ end
 function writeF(command) --Writes the lua code to the .lua file 
     table.insert(compiledLines, command) --Adds the lua code to a table called compiledLines
     print(command)
+    sleep(0.1)
 
-    osfile = fs.open(compiledFileName, "w") --Open the .lua file
+    osfile = fs.open(compiledFileName, "w") --Open the .lua fileExists(
     for j = 1, #compiledLines do --Loop through compiledLines and add each line of lua to the .lua file
         osfile.writeLine(compiledLines[j])
     end
@@ -104,6 +105,10 @@ function addMoveAPI() --Injects the moveapi into the start of the .lua file for 
     writeF("isPlant = true")
     writeF("seeds = 'minecraft:potato'")
     writeF("harvestLevel = 7")
+    writeF("elseif data.name == 'ExtraUtilities:plant/ender_lily' then")
+    writeF("isPlant = true")
+    writeF("harvestLevel = 7")
+    writeF("seeds = 'ExtraUtilities:plant/ender_lily'")
     writeF("else")
     writeF("end")
     writeF("if isPlant == true then")
